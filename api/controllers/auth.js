@@ -61,4 +61,39 @@ const signin = async (req, res, next) => {
     }
 }
 
-module.exports = { signup, signin };
+const googleAuth = async (req, res, next) => {
+    const { name, email, photoURL } = req.body
+
+    const user = await User.findOne({ email})
+
+    try {
+        if (user) {
+            const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+            res.cookie('access_token', token, { httpOnly: true });
+
+            const { password: pass, ...rest } = user._doc
+            res.status(200).json(rest)
+        } else {
+            const randomPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8)
+            const hashedPassword = bcryptjs.hashSync(randomPassword, 10);
+
+            const newUser = await User.create({
+                username: name.toLowerCase().split(' ').join('') + Math.random().toString(9).slice(-4),
+                email,
+                password: hashedPassword,
+                profilePicture: photoURL
+            })
+
+            const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+            const { password: pass, ...rest } = newUser._doc
+    
+            res.cookie('access_token', token, { httpOnly: true });
+    
+            res.status(200).json(rest)
+        }        
+    } catch (error) {
+        next(errorHandler(500, error.message));
+    }
+}
+
+module.exports = { signup, signin, googleAuth };

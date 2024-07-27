@@ -18,9 +18,10 @@ import {
     deleteUserSuccess,
     updateFailure, 
     updateStart, 
-    updateSuccess 
+    updateSuccess,
 } from '../redux/user/userSlice';
-import { updateProfileRoute, deleteUserRoute } from '../apiRoutes/routes';
+import { updateProfileRoute, deleteUserRoute, } from '../apiRoutes/routes';
+import { useUtils } from '../utils/signout';
 
 const DashProfile = () => {
     const { currentUser } = useSelector(state => state.user)
@@ -33,6 +34,7 @@ const DashProfile = () => {
     const [updateUserError, setUpdateUserError] = useState(null)
     const [isUploading, setIsUploading] = useState(false)
     const [showModal, setShowModal] = useState(false)
+    const { handleSignout } =useUtils()
 
     const filePickerRef = useRef()
     const dispatch = useDispatch()
@@ -82,6 +84,7 @@ const DashProfile = () => {
             setUpdateUserError(error.message)
         }
     }
+
     const handleDeleteUser = async () => {
         setShowModal(false)
         try {
@@ -95,7 +98,7 @@ const DashProfile = () => {
         } catch (error) {
             dispatch(deleteUserFailure(error.message));
         }
-    }
+    }    
     
     useEffect(() => {
         const uploadImageFile = async() => {
@@ -197,7 +200,7 @@ const DashProfile = () => {
             </form>
             <div className='text-red-500 flex justify-between mt-5'>
                 <span onClick={() => setShowModal(true)} className='cursor-pointer'>Delete Account</span>
-                <span className='cursor-pointer'>Sign Out</span>
+                <span onClick={handleSignout} className='cursor-pointer'>Sign Out</span>
             </div>
             {updateUserSuccess && (
                 <Alert color='success' className='mt-5'>

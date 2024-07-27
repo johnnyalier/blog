@@ -4,16 +4,14 @@ import { AiOutlineSearch } from'react-icons/ai'
 import { useSelector, useDispatch } from 'react-redux'
 import { toggleTheme } from '../redux/theme/themeSlice'
 import { FaMoon, FaSun } from'react-icons/fa'
+import { useUtils } from '../utils/signout';
 
 const Header = () => {
     const path = useLocation().pathname
     const { currentUser } = useSelector(state => state.user)
     const { theme } = useSelector(state => state.theme)
+    const { handleSignout } =useUtils()
     const dispatch = useDispatch()
-
-    const handleSignout = () => {
-        // Implement sign out logic here
-    }
 
     return (
         <Navbar className='border-b-2'>

@@ -9,10 +9,12 @@ import {
     HiAnnotation,
     HiChartPie,
 } from 'react-icons/hi';
+import { useUtils } from '../utils/signout';
 
 const DashSidebar = () => {
     const location = useLocation()
     const [tab, setTab] = useState('')
+    const { handleSignout } =useUtils()
 
     useEffect(() => {
         const tabParam = new URLSearchParams(location.search).get('tab')
@@ -36,7 +38,7 @@ const DashSidebar = () => {
                             Profile
                         </Sidebar.Item>
                     </Link>
-                    <Sidebar.Item icon={HiArrowSmRight} className='cursor-pointer'>
+                    <Sidebar.Item onClick={handleSignout} icon={HiArrowSmRight} className='cursor-pointer'>
                         Sign out
                     </Sidebar.Item>
                 </Sidebar.ItemGroup>

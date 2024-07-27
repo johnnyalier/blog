@@ -33,21 +33,21 @@ const signup = async (req, res, next) => {
 const signin = async (req, res, next) => {
     const { email, password } = req.body;
 
-    if (!email ||!password) {
-        next(errorHandler(404, 'Email and password are required'));
+    if (!email ||!password || email === '' || password === '') {
+        next(errorHandler(400, 'Email and password are required'));
     }
 
     try {
         const user = await User.findOne({ email });
 
         if (!user) {
-            return next(errorHandler(400, 'Invalid credentials'));
+            return next(errorHandler(404, 'User not found'));
         }
 
         const isMatch = bcryptjs.compareSync(password, user.password);
 
         if (!isMatch) {
-            return next(errorHandler(401, 'Invalid credentials'));
+            return next(errorHandler(400, 'Invalid credentials'));
         }
 
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);

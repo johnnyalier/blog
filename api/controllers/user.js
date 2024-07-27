@@ -42,11 +42,23 @@ const updateProfile = async (req, res, next) => {
         const { password, ...rest } = updatedUser._doc;
         res.status(200).json(rest);
     } catch (error) {
-        next(error);
+        next(errorHandler(500, error.message));
     }
 };
 
+const deleteUser = async (req, res, next) => {
+    if (req.user.id!== req.params.userId)
+        return next(errorHandler(403, 'Unauthorized'));
+
+    try {
+        await User.findByIdAndDelete(req.params.userId);
+        res.status(200).json({ message: 'User deleted successfully' });
+    } catch (error) {
+        next(errorHandler(500, error.message));
+    }
+}
 
 module.exports = {
     updateProfile,
+    deleteUser,
 }

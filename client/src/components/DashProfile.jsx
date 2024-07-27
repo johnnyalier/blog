@@ -10,6 +10,9 @@ import {
 import { app } from '../firebase';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+import axios from 'axios';
+import { updateFailure, updateStart, updateSuccess } from '../redux/user/userSlice';
+import { updateProfileRoute } from '../apiRoutes/routes';
 
 const DashProfile = () => {
     const { currentUser } = useSelector(state => state.user)
@@ -17,6 +20,11 @@ const DashProfile = () => {
     const [imageFileUrl, setImageFileUrl] = useState(null)
     const [uploadProgress, setUploadProgress] = useState(null)
     const [uploadError, setUploadError] = useState(null)
+    const [formData, setFormData] = useState({})
+    const [updateUserSuccess, setUpdateUserSuccess] = useState(null)
+    const [updateUserError, setUpdateUserError] = useState(null)
+    const [isUploading, setIsUploading] = useState(false)
+
     const filePickerRef = useRef()
     const dispatch = useDispatch()
 
@@ -27,33 +35,75 @@ const DashProfile = () => {
         setImageFile(file)
         setImageFileUrl(URL.createObjectURL(file))
     }
-    const uploadImageFile = async() => {
-        setUploadError(null)
-        const storage = getStorage(app)
-        const fileName = new Date().getTime().toString() + imageFile.name
-        const storageRef = ref(storage, fileName)
-        const uploadTask = uploadBytesResumable(storageRef, imageFile)
-        uploadTask.on(
-            'state_changed', 
-            (snapshot) => {
-                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                setUploadProgress(progress.toFixed(0))
-            },
-            (error) => {
-                setUploadError("File not uploaded! Accept only image file size < 2MB")
-                setUploadProgress(null)
-                setImageFile(null)
-                setImageFileUrl(null)
-            },
-            () => {
-                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {                    
-                    setImageFileUrl(downloadURL)
-                })
-            }
-        );
+
+    const handleChange = (e) => {
+        setFormData({...formData, [e.target.id]: e.target.value})
     }
 
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        setUpdateUserError(null);
+        setUpdateUserSuccess(null);
+
+        if (Object.keys(formData).length === 0) {
+            setUpdateUserError('Please fill out at least one field to update')
+            return
+        }
+
+        if (isUploading) {
+            setUpdateUserError('Image upload in progress')
+            return
+        }
+
+        try {
+            dispatch(updateStart())
+            const response  = await axios.put(`${updateProfileRoute}/${currentUser._id}`, {
+                ...formData
+            })
+            if (response.status === 200) {
+                dispatch(updateSuccess(response.data))
+                setUpdateUserSuccess('Profile updated successfully!')
+                setFormData({})
+            } else {
+                dispatch(updateFailure(response.data.message))
+                setUpdateUserError(response.data.message)
+            }
+        } catch (error) {
+            dispatch(updateFailure(error))
+            setUpdateUserError(error.message)
+        }
+    }
+    
     useEffect(() => {
+        const uploadImageFile = async() => {
+            setIsUploading(true)
+            setUploadError(null)
+            const storage = getStorage(app)
+            const fileName = new Date().getTime().toString() + imageFile.name
+            const storageRef = ref(storage, fileName)
+            const uploadTask = uploadBytesResumable(storageRef, imageFile)
+            uploadTask.on(
+                'state_changed', 
+                (snapshot) => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    setUploadProgress(progress.toFixed(0))
+                },
+                (error) => {
+                    setUploadError("File not uploaded! Accept only image file size < 2MB")
+                    setUploadProgress(null)
+                    setImageFile(null)
+                    setImageFileUrl(null)
+                    setIsUploading(false)
+                },
+                () => {
+                    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {                    
+                        setImageFileUrl(downloadURL)
+                        setFormData({...formData, profilePicture: downloadURL })
+                        setIsUploading(false)
+                    })
+                }
+            );
+        }
         if (imageFile) {
             uploadImageFile()
         }
@@ -62,7 +112,7 @@ const DashProfile = () => {
     return (
         <div className='max-w-lg mx-auto p-3 w-full'>
             <h1 className='my-7 text-center font-semibold text-3xl'>Profile</h1>
-            <form className='flex flex-col gap-4'>
+            <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
                 <input type="file" accept='image/*' onChange={handleImageChange} ref={filePickerRef} hidden/>
                 <div 
                     className='relative w-32 h-32 self-center cursor-pointer shadow-md overflow-hidden rounded-full'
@@ -105,17 +155,20 @@ const DashProfile = () => {
                     id='username' 
                     placeholder='username' 
                     defaultValue={currentUser.username}
+                    onChange={handleChange}
                 />
                 <TextInput 
                     type='email' 
                     id='email' 
                     placeholder='email'
                     defaultValue={currentUser.email}
+                    onChange={handleChange}
                 />
                 <TextInput 
                     type='password' 
                     id='passowrd' 
                     placeholder='password'
+                    onChange={handleChange}
                 />
                 <Button type='submit' gradientDuoTone='purpleToBlue' outline>Update Profile</Button>
             </form>
@@ -123,6 +176,16 @@ const DashProfile = () => {
                 <span className='cursor-pointer'>Delete Account</span>
                 <span className='cursor-pointer'>Sign Out</span>
             </div>
+            {updateUserSuccess && (
+                <Alert color='success' className='mt-5'>
+                    {updateUserSuccess}
+                </Alert>
+            )}
+            {updateUserError && (
+                <Alert color='failure' className='mt-5'>
+                    {updateUserError}
+                </Alert>
+            )}
         </div>
     )
 }

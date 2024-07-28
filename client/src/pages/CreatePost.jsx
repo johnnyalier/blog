@@ -44,6 +44,7 @@ const CreatePost = () => {
                     setUploadProgress(progress.toFixed(0));
                 },
                 (error) => {
+                    console.log(error);
                     setUploadError('Image upload failed');
                     setUploadProgress(null);
                 },

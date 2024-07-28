@@ -39,18 +39,30 @@ const DashSidebar = () => {
                             Profile
                         </Sidebar.Item>
                     </Link>
-                    {currentUser.isAdmin && 
-                        <Link to='/dashboard?tab=posts'>
-                            <Sidebar.Item 
-                                active={tab === 'posts'} 
-                                icon={HiDocumentText} 
-                                labelColor='dark'
-                                as='div'
-                            >
-                                Posts
-                            </Sidebar.Item>
-                        </Link>
-                    }
+                    {currentUser.isAdmin && (
+                        <>
+                            <Link to='/dashboard?tab=posts'>
+                                <Sidebar.Item 
+                                    active={tab === 'posts'} 
+                                    icon={HiDocumentText} 
+                                    labelColor='dark'
+                                    as='div'
+                                >
+                                    Posts
+                                </Sidebar.Item>
+                            </Link>
+                            <Link to='/dashboard?tab=users'>
+                                <Sidebar.Item 
+                                    active={tab === 'users'} 
+                                    icon={HiOutlineUserGroup} 
+                                    labelColor='dark'
+                                    as='div'
+                                >
+                                    Users
+                                </Sidebar.Item>
+                            </Link>
+                        </>
+                    )}
                     <Sidebar.Item onClick={handleSignout} icon={HiArrowSmRight} className='cursor-pointer'>
                         Sign out
                     </Sidebar.Item>

@@ -8,3 +8,4 @@ export const createPostRoute = '/api/post/create';
 export const getPostsRoute = '/api/post/getposts';
 export const deletePostsRoute = '/api/post/delete';
 export const updatePostRoute = '/api/post/update';
+export const getUsersRoute = '/api/user/getusers';

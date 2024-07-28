@@ -1,5 +1,5 @@
 import { Alert, Button, Modal, TextInput } from 'flowbite-react'
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { useSelector, useDispatch } from 'react-redux'
 import {
@@ -25,7 +25,7 @@ import { useUtils } from '../utils/signout';
 import { Link } from 'react-router-dom';
 
 const DashProfile = () => {
-    const { currentUser, loading, error } = useSelector(state => state.user)
+    const { currentUser, loading } = useSelector(state => state.user)
     const [imageFile, setImageFile] = useState(null)
     const [imageFileUrl, setImageFileUrl] = useState(null)
     const [uploadProgress, setUploadProgress] = useState(null)
@@ -116,6 +116,7 @@ const DashProfile = () => {
                     setUploadProgress(progress.toFixed(0))
                 },
                 (error) => {
+                    console.log(error);
                     setUploadError("File not uploaded! Accept only image file size < 2MB")
                     setUploadProgress(null)
                     setImageFile(null)

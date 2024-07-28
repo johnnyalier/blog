@@ -22,9 +22,10 @@ import {
 } from '../redux/user/userSlice';
 import { updateProfileRoute, deleteUserRoute, } from '../apiRoutes/routes';
 import { useUtils } from '../utils/signout';
+import { Link } from 'react-router-dom';
 
 const DashProfile = () => {
-    const { currentUser } = useSelector(state => state.user)
+    const { currentUser, loading, error } = useSelector(state => state.user)
     const [imageFile, setImageFile] = useState(null)
     const [imageFileUrl, setImageFileUrl] = useState(null)
     const [uploadProgress, setUploadProgress] = useState(null)
@@ -196,7 +197,25 @@ const DashProfile = () => {
                     placeholder='password'
                     onChange={handleChange}
                 />
-                <Button type='submit' gradientDuoTone='purpleToBlue' outline>Update Profile</Button>
+                <Button 
+                    type='submit' 
+                    gradientDuoTone='purpleToBlue' 
+                    outline
+                    disabled={loading || isUploading}
+                >
+                    {(loading || isUploading) ? 'Loading...' : 'Update Profile'}
+                </Button>
+                {currentUser.isAdmin && (
+                    <Link to='/create-post'>
+                        <Button
+                            type='button'
+                            gradientDuoTone='purpleToPink'
+                            className='w-full'
+                        >
+                            Create a Post
+                        </Button>
+                    </Link>
+                )}
             </form>
             <div className='text-red-500 flex justify-between mt-5'>
                 <span onClick={() => setShowModal(true)} className='cursor-pointer'>Delete Account</span>

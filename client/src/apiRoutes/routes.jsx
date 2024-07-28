@@ -4,3 +4,4 @@ export const googleRoute = '/api/auth/google-signin';
 export const updateProfileRoute = '/api/user/update';
 export const deleteUserRoute = '/api/user/delete';
 export const signoutRoute = '/api/user/signout';
+export const createPostRoute = '/api/post/create';

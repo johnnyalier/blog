@@ -4,6 +4,7 @@ import About from './pages/About';
 import SignIn from './pages/SignIn';
 import Dashboard from './pages/Dashboard';
 import Projects from './pages/Projects';
+import Post from './pages/Post';
 import SignUp from './pages/SignUp';
 import CreatePost from "./pages/CreatePost";
 import UpdatePost from "./pages/UpdatePost";
@@ -29,6 +30,7 @@ const App = () =>{
                     <Route path="/update-post/:postId" element={<UpdatePost />} />
                 </Route>
                 <Route path="/projects" element={<Projects />} />
+                <Route path="/post/:postSlug" element={<Post />} />
                 <Route path="/signup" element={<SignUp />} />
             </Routes>
             <Footer />

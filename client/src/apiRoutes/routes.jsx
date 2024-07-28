@@ -9,3 +9,4 @@ export const getPostsRoute = '/api/post/getposts';
 export const deletePostsRoute = '/api/post/delete';
 export const updatePostRoute = '/api/post/update';
 export const getUsersRoute = '/api/user/getusers';
+export const getRecentPostsRoute = '/api/post/getrecentposts';

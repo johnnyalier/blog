@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { Button, Spinner } from 'flowbite-react';
 import axios from 'axios';
 import { getPostsRoute, getRecentPostsRoute } from '../apiRoutes/routes';
+import CallToAction from '../components/CallToAction';
 
 const Post = () => {
     const { postSlug } = useParams();
@@ -60,6 +61,9 @@ const Post = () => {
                 className='p-3 max-w-2xl mx-auto w-full post-content'
                 dangerouslySetInnerHTML={{ __html: post && post.content }}
             ></div>
+            <div className='max-w-4xl mx-auto w-full'>
+                <CallToAction />
+            </div>
         </main>
     )
 }

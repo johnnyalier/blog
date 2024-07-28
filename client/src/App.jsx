@@ -6,6 +6,7 @@ import Dashboard from './pages/Dashboard';
 import Projects from './pages/Projects';
 import SignUp from './pages/SignUp';
 import CreatePost from "./pages/CreatePost";
+import UpdatePost from "./pages/UpdatePost";
 import PrivateAdminRoute from "./components/PrivateAdminRoute";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -25,13 +26,13 @@ const App = () =>{
                 </Route>
                 <Route element={<PrivateAdminRoute />}>
                     <Route path="/create-post" element={<CreatePost />} />
+                    <Route path="/update-post/:postId" element={<UpdatePost />} />
                 </Route>
                 <Route path="/projects" element={<Projects />} />
                 <Route path="/signup" element={<SignUp />} />
             </Routes>
             <Footer />
         </BrowserRouter>
-        // Add your routes here.
 	)
 }
 

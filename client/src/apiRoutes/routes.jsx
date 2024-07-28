@@ -5,3 +5,6 @@ export const updateProfileRoute = '/api/user/update';
 export const deleteUserRoute = '/api/user/delete';
 export const signoutRoute = '/api/user/signout';
 export const createPostRoute = '/api/post/create';
+export const getPostsRoute = '/api/post/getposts';
+export const deletePostsRoute = '/api/post/delete';
+export const updatePostRoute = '/api/post/update';

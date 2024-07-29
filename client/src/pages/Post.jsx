@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom';
 import { Button, Spinner } from 'flowbite-react';
 import axios from 'axios';
-import { getPostsRoute, getRecentPostsRoute } from '../apiRoutes/routes';
+import { getPostsRoute } from '../apiRoutes/routes';
 import CallToAction from '../components/CallToAction';
 import CommentSection from '../components/CommentSection';
+import PostCard from '../components/PostCard';
 
 const Post = () => {
     const { postSlug } = useParams();
@@ -33,7 +34,23 @@ const Post = () => {
             }
         }
         fetchPost();
-    },[])
+    },[postSlug])
+
+    useEffect(() => {
+        const fetchRecentPosts = async () => {
+            try {
+                const response = await axios.get(`${getPostsRoute}?limit=3&sortBy=createdAt&order=-1`)
+                if (response.status === 200) {
+                    setRecentPosts(response.data.posts);
+                } else {
+                    console.log(response.data.message);
+                }
+            } catch (error) {
+                console.log(error.message);
+            }
+        }
+        fetchRecentPosts();
+    }, [])
 
     if (loading) {
         return (
@@ -66,6 +83,14 @@ const Post = () => {
                 <CallToAction />
             </div>
             <CommentSection postId={post && post._id} />
+            <div className='w-full flex flex-col justify-center items-center mb-5'>
+                <h1 className='text-xl mt-5'>Recent articles</h1>
+                <div className='flex flex-wrap gap-5 mt-5 justify-center'>
+                    {recentPosts &&
+                        recentPosts.map((post) => <PostCard key={post._id} post={post} />
+                    )}
+                </div>
+            </div>
         </main>
     )
 }

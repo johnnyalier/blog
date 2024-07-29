@@ -51,6 +51,16 @@ const DashSidebar = () => {
                                     Posts
                                 </Sidebar.Item>
                             </Link>
+                            <Link to='/dashboard?tab=comments'>
+                                <Sidebar.Item 
+                                    active={tab === 'comments'} 
+                                    icon={HiAnnotation} 
+                                    labelColor='dark'
+                                    as='div'
+                                >
+                                    Comments
+                                </Sidebar.Item>
+                            </Link>
                             <Link to='/dashboard?tab=users'>
                                 <Sidebar.Item 
                                     active={tab === 'users'} 

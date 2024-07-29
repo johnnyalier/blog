@@ -8,6 +8,7 @@ const cors = require("cors");
 const authRoutes = require('./routes/auth');
 const userRoute = require('./routes/user');
 const postRoute = require('./routes/post');
+const commentRoute = require('./routes/comment');
 
 dotenv.config()
 
@@ -25,6 +26,7 @@ app.get('/test', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoute);
 app.use('/api/post', postRoute);
+app.use('/api/comment', commentRoute);
 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;

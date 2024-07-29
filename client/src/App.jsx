@@ -12,11 +12,13 @@ import PrivateAdminRoute from "./components/PrivateAdminRoute";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import PrivateRoute from "./components/PrivateRoute";
+import ScrollToTop from "./components/ScrollToTop";
 
 const App = () =>{
 
 	return (
 		<BrowserRouter>
+            <ScrollToTop />
 			<Header />
             <Routes>
                 <Route path="/" exact element={<Home />} />

@@ -4,6 +4,7 @@ import { Button, Spinner } from 'flowbite-react';
 import axios from 'axios';
 import { getPostsRoute, getRecentPostsRoute } from '../apiRoutes/routes';
 import CallToAction from '../components/CallToAction';
+import CommentSection from '../components/CommentSection';
 
 const Post = () => {
     const { postSlug } = useParams();
@@ -64,6 +65,7 @@ const Post = () => {
             <div className='max-w-4xl mx-auto w-full'>
                 <CallToAction />
             </div>
+            <CommentSection postId={post && post._id} />
         </main>
     )
 }

@@ -38,6 +38,10 @@ app.use((err, req, res, next) => {
     });
 });
 
+app.get('*', (req, res) => {
+    res.sendFile(path.join(path.resolve(), 'client', 'dist', 'index.html'))
+})
+
 mongoose.connect(process.env.MONGO).then(() => {
     console.log('Connected to sudd-estate database')
     app.listen(PORT, () => {

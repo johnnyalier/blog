@@ -13,6 +13,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import PrivateRoute from "./components/PrivateRoute";
 import ScrollToTop from "./components/ScrollToTop";
+import Search from "./pages/Search";
 
 const App = () =>{
 
@@ -22,6 +23,7 @@ const App = () =>{
 			<Header />
             <Routes>
                 <Route path="/" exact element={<Home />} />
+                <Route path="/search" element={<Search />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/signin" element={<SignIn />} />
                 <Route element={<PrivateRoute />}>

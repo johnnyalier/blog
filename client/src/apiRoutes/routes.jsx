@@ -16,3 +16,4 @@ export const getCommentsRoute = '/api/comment/getcomments';
 export const getUserRoute = '/api/user';
 export const editCommentRoute = '/api/comment/update';
 export const deleteCommentRoute = '/api/comment/delete';
+export const searchPostsRoute = '/api/post/search';

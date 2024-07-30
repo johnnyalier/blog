@@ -38,6 +38,8 @@ app.use((err, req, res, next) => {
     });
 });
 
+app.use(express.static(path.join(path.resolve(), '/client/dist')))
+
 app.get('*', (req, res) => {
     res.sendFile(path.join(path.resolve(), 'client', 'dist', 'index.html'))
 })
